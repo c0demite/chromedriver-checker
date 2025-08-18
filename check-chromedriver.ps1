@@ -14,7 +14,7 @@ try {
     $m = [regex]::Match($html, '(?si)https?://\S*chromedriver\S*win64\S*?\.zip')
 
     if (-not $m.Success) {
-        $m = [regex]::Match($html, '(?si)<tr\b[^>]*>.*?chromedriver.*?win64.*?<a[^>]+href=["'](?<h>[^"']+?) ["']')
+        $m = [regex]::Match($html, '(?si)<tr\b[^>]*>.*?chromedriver.*?win64.*?<a[^>]+href=["''](?<h>[^"'']+?)["'']')
     }
 
     if ($m.Success) {
