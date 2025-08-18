@@ -14,7 +14,7 @@ try {
     $m = [regex]::Match($html, '(?si)https?://\S*chromedriver\S*win64\S*?\.zip')
 
     if (-not $m.Success) {
-        $m = [regex]::Match($html, '(?si)<tr\b[^>]*>.*?chromedriver.*?win64.*?<a[^>]+href=["''](?<h>[^"'']+?)["'']')
+        $m = [regex]::Match($html, '(?si)<tr\b[^>]*>.*?chromedriver.*?win64.*?<a[^>]+href=["'](?<h>[^"']+?) ["']')
     }
 
     if ($m.Success) {
@@ -69,4 +69,18 @@ try {
     }
 } catch {
     Write-Host "Błąd: $($_.Exception.Message)"
+}
+
+# Otwórz Chrome na stronie chrome://settings/help
+$target = 'chrome://settings/help'
+$chromePaths = @(
+    "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
+    "$env:ProgramFiles(x86)\Google\Chrome\Application\chrome.exe",
+    "$env:LocalAppData\Google\Chrome\Application\chrome.exe"
+)
+$chrome = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($chrome) {
+    Start-Process -FilePath $chrome -ArgumentList $target
+} else {
+    Start-Process $target
 }
