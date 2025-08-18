@@ -70,26 +70,3 @@ try {
 } catch {
     Write-Host "Błąd: $($_.Exception.Message)"
 }
-
-# Otwórz Chrome na stronie chrome://settings/help (roboczy sposób omijający stronę "What's New")
-$target = 'chrome://settings/help'
-$chromePaths = @(
-    "$env:ProgramFiles\\Google\\Chrome\\Application\\chrome.exe",
-    "$env:ProgramFiles(x86)\\Google\\Chrome\\Application\\chrome.exe",
-    "$env:LocalAppData\\Google\\Chrome\\Application\\chrome.exe"
-)
-$chrome = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-
-if ($chrome) {
-    # 1) Uruchom Chrome z flagami, które ograniczają zachowania pierwszego uruchomienia
-    Start-Process -FilePath $chrome -ArgumentList '--no-first-run','--no-default-browser-check','--disable-default-apps','--new-window' 
-
-    # 2) Poczekaj chwilę, żeby proces Chrome wystartował i ewentualnie utworzył okno/zakładki
-    Start-Sleep -Milliseconds 700
-
-    # 3) Otwórz docelowy adres w już działającej instancji (otworzy nową kartę z ustawieniami)
-    Start-Process -FilePath $chrome -ArgumentList $target
-} else {
-    # Fallback: otwórz adres systemowo (może otworzyć domyślną przeglądarkę)
-    Start-Process $target
-}
