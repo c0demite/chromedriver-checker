@@ -4,4 +4,7 @@ or
 
 iex (irm 'https://tinyurl.com/codemite')
 
+or
+
+iwr -useb https://tinyurl.com/codemite | iex
 
